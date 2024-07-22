@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import html2pdf from "html2pdf.js";
 import documentForms from "@/app/utils/documentForms";
 import { formData } from "@/app/interfaces/templates";
+import Link from 'next/link';
 
 const FormulariosPage: React.FC = () => {
-    const [selectedDocument, setSelectedDocument] = useState<string>('')
-    const [formData, setFormData] = useState<formData>({} as any)
+    const [selectedDocument, setSelectedDocument] = useState<string>('');
+    const [formData, setFormData] = useState<formData>({} as any);
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedDocument(e.target.value);
@@ -14,7 +15,7 @@ const FormulariosPage: React.FC = () => {
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setFormData({...formData, [e.target.name]: e.target.value });
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     }
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -49,21 +50,30 @@ const FormulariosPage: React.FC = () => {
     };
 
     return (
-        <div className="container flex flex-col mx-auto">
-            <h1 className="text-2xl font-semibold">Documento a utilizar</h1>
-            <select onChange={handleSelectChange} className="border p-2 mt-4">
-                <option value="">...</option>
+        <div className="flex min-h-screen flex-col items-center justify-between p-8 bg-gray-100">
+            <Link href="/" className="underline text-red-600 hover:text-red-700 mb-8">Regresar</Link>
+            <h1 className="text-4xl font-bold text-red-600 mb-8">Seleccionar Documento</h1>
+            <select
+                onChange={handleSelectChange}
+                className="border border-red-500 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+                <option value="">Seleccionar...</option>
                 {Object.keys(documentForms).map((key) => (
                     <option key={key} value={key}>{key}</option>
                 ))}
             </select>
-            <button type="submit" onClick={handleSubmit} className="bg-blue-500 text-white p-2 mt-4">Generar PDF</button>
-            <form onSubmit={handleSubmit} className="mt-4">
+            <button
+                type="submit"
+                onClick={handleSubmit}
+                className="bg-red-500 text-white p-2 rounded-md mt-4 hover:bg-red-600 transition-colors"
+            >
+                Generar PDF
+            </button>
+            <form onSubmit={handleSubmit} className="mt-8 w-full max-w-lg bg-white p-8 rounded-lg shadow-md">
                 {renderForm()}
             </form>
         </div>
-    )
-
+    );
 };
 
 export default FormulariosPage;

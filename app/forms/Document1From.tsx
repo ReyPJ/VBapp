@@ -10,22 +10,22 @@ interface Props {
 const Document1form: React.FC<Props> = ({ handleInputChange, formData }) => {
     return (
         <>
-            <div className="space-y-4 py-8">
+            <div className="space-y-6 py-8">
                 <input
                     type="text"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
                     placeholder="Nombre"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out"
                 />
                 <input
                     type="text"
                     name="cedula"
                     value={formData.cedula}
                     onChange={handleInputChange}
-                    placeholder="Cedula"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Cédula"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out"
                 />
                 <input
                     type="text"
@@ -33,7 +33,7 @@ const Document1form: React.FC<Props> = ({ handleInputChange, formData }) => {
                     value={formData.examen}
                     onChange={handleInputChange}
                     placeholder="Examen"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out"
                 />
             </div>
             <h2 className="font-semibold text-lg pb-10 pt-6">Vista previa del documento:</h2>
@@ -55,7 +55,7 @@ const Document1form: React.FC<Props> = ({ handleInputChange, formData }) => {
                         <div className="p-6">
                             <p className="font-semibold">1. Negativa a Realizarme el Examen de {formData.examen}:</p>
                             <ul className="list-none text-justify list-inside">
-                            <li className="px-3 py-1">
+                                <li className="px-3 py-1">
                                     ⚬ He sido informado/a por el personal médico del Centro Veterinario
                                     VB sobre
                                     la importancia y la necesidad de realizar un examen de sangre a mi mascota
@@ -87,7 +87,8 @@ const Document1form: React.FC<Props> = ({ handleInputChange, formData }) => {
                             <ul className=" list-none text-justify list-inside">
                                 <li className="px-3 py-1">
                                     ⚬ Firmo esta liberación de responsabilidad para dejar constancia de que mi
-                                    decisión de no realizar el examen de {formData.examen} es voluntaria y bien informada.
+                                    decisión de no realizar el examen de {formData.examen} es voluntaria y bien
+                                    informada.
                                 </li>
                                 <li className="px-3 py-1">
                                     ⚬ Eximo al Centro Veterinario VB, a sus empleados, agentes y representantes

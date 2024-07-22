@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Document3FormData } from "@/app/interfaces/templates";
 import Image from "next/image";
 
@@ -8,153 +8,87 @@ interface Props {
 }
 
 const Document3form: React.FC<Props> = ({ handleInputChange, formData }) => {
+    const [currentSection, setCurrentSection] = useState<number>(1);
+
+    const nextSection = () => {
+        if (currentSection < 2) setCurrentSection(currentSection + 1);
+    };
+
+    const prevSection = () => {
+        if (currentSection > 1) setCurrentSection(currentSection - 1);
+    };
+
+    const section1Fields: { name: keyof Document3FormData; placeholder: string }[] = [
+        { name: 'paciente', placeholder: 'Paciente' },
+        { name: 'especie', placeholder: 'Especie' },
+        { name: 'raza', placeholder: 'Raza' },
+        { name: 'edad', placeholder: 'Edad' },
+        { name: 'sexo', placeholder: 'Sexo' },
+        { name: 'color', placeholder: 'Color' },
+    ];
+
+    const section2Fields: { name: keyof Document3FormData; placeholder: string }[] = [
+        { name: 'num_historia_clinica', placeholder: 'Número de Historia Clínica' },
+        { name: 'propietario', placeholder: 'Propietario' },
+        { name: 'direccion', placeholder: 'Dirección' },
+        { name: 'telefono', placeholder: 'Teléfono' },
+        { name: 'email', placeholder: 'Correo Electrónico' },
+        { name: 'fecha_admision', placeholder: 'Fecha de Admisión' },
+        { name: 'fecha_salida', placeholder: 'Fecha de Salida' },
+        { name: 'motivo_admision', placeholder: 'Motivo de Admisión' },
+        { name: 'diagnostico', placeholder: 'Diagnóstico' },
+        { name: 'tratamiento', placeholder: 'Tratamiento' },
+        { name: 'condiciones_salida', placeholder: 'Condiciones de Salida' },
+    ];
+
+    const renderFields = (fields: { name: keyof Document3FormData; placeholder: string }[]) => (
+        fields.map((field) => (
+            <input
+                key={field.name}
+                type="text"
+                name={field.name}
+                value={formData[field.name] || ''}
+                onChange={handleInputChange}
+                placeholder={field.placeholder}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200 ease-in-out"
+            />
+        ))
+    );
     return(
         <>
             <div className="space-y-4 py-8">
-                <input
-                    type="text"
-                    name="paciente"
-                    value={formData.paciente}
-                    onChange={handleInputChange}
-                    placeholder="Paciente"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="especie"
-                    value={formData.especie}
-                    onChange={handleInputChange}
-                    placeholder="Especie"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="raza"
-                    value={formData.raza}
-                    onChange={handleInputChange}
-                    placeholder="Raza"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="edad"
-                    value={formData.edad}
-                    onChange={handleInputChange}
-                    placeholder="Edad"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="sexo"
-                    value={formData.sexo}
-                    onChange={handleInputChange}
-                    placeholder="Sexo"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="color"
-                    value={formData.color}
-                    onChange={handleInputChange}
-                    placeholder="Color"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="num_historia_clinica"
-                    value={formData.num_historia_clinica}
-                    onChange={handleInputChange}
-                    placeholder="Numero de Historia Clinica"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="propietario"
-                    value={formData.propietario}
-                    onChange={handleInputChange}
-                    placeholder="Propietario"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="direccion"
-                    value={formData.direccion}
-                    onChange={handleInputChange}
-                    placeholder="Direccion"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="telefono"
-                    value={formData.telefono}
-                    onChange={handleInputChange}
-                    placeholder="Telefono"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="Correo Electronico"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="fecha_admision"
-                    value={formData.fecha_admision}
-                    onChange={handleInputChange}
-                    placeholder="Fecha de Admision"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="fecha_salida"
-                    value={formData.fecha_salida}
-                    onChange={handleInputChange}
-                    placeholder="Fecha de Salida"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="motivo_admision"
-                    value={formData.motivo_admision}
-                    onChange={handleInputChange}
-                    placeholder="Motivo de Admisíon"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="diagnostico"
-                    value={formData.diagnostico}
-                    onChange={handleInputChange}
-                    placeholder="Diagnóstico"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="tratamiento"
-                    value={formData.tratamiento}
-                    onChange={handleInputChange}
-                    placeholder="Tratamiento"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="condiciones_salida"
-                    value={formData.condiciones_salida}
-                    onChange={handleInputChange}
-                    placeholder="Condiciones de Salida"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                {currentSection === 1 && renderFields(section1Fields)}
+                {currentSection === 2 && renderFields(section2Fields)}
+
+                <div className="flex justify-between mt-4">
+                    {currentSection > 1 && (
+                        <button
+                            type="button"
+                            onClick={prevSection}
+                            className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        >
+                            Anterior
+                        </button>
+                    )}
+                    {currentSection < 2 && (
+                        <button
+                            type="button"
+                            onClick={nextSection}
+                            className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                        >
+                            Siguiente
+                        </button>
+                    )}
+                </div>
             </div>
+
             <h2 className="font-semibold text-lg pb-10 pt-6">Vista previa del documento:</h2>
             <div id="document-3-template" className="w-full">
                 <div className="flex flex-col mb-3 gap-3 pt-0 justify-center items-center w-full">
                     <Image src="/logo.jpg" alt="logo" width={100} height={100} className="w-1/6"/>
                     <h1 className="text-base font-semibold w-5/6 text-center">Centro Veterinario VB</h1>
                 </div>
-                <div className="text-xs flex py-3 flex-col gap-2">
+                <div className="text-xs flex py-2 flex-col gap-2">
                     <p>Dirección: de la iglesia del llano 25 metros este</p>
                     <p>Teléfono: 2100-2193 / 6087-7912</p>
                     <p>Correo Electrónico: administracion@esteticaysaludvb.com</p>
@@ -218,13 +152,14 @@ const Document3form: React.FC<Props> = ({ handleInputChange, formData }) => {
                 </div>
                 <div className="text-xs flex pb-3 flex-col gap-2">
                     <h2 className="text-sm font-semibold">Aprobación de Salida Condicionada:</h2>
-                    <p>
+                    <p className='text-xs'>
                         Yo {formData.propietario}, confirmo que he recibido y entiendo las
-                        instrucciones proporcionadas por el personal del Hospital Veterinario VB. Estoy de acuerdo en seguir
+                        instrucciones proporcionadas por el personal del Hospital Veterinario VB. Estoy de acuerdo en
+                        seguir
                         todas las indicaciones y contactar al hospital si hay algún problema o duda.
                     </p>
                 </div>
-                <div className="w-full flex justify-between pb-3 gap-2 text-xs text-center mt-6">
+                <div className="w-full flex justify-between pb-2 gap-2 text-xs text-center mt-6">
                     <p>Firma: _______________________________</p>
                     <p>Fecha: {formData.fecha_salida}</p>
                 </div>
