@@ -39,9 +39,10 @@ const Document1form: React.FC<Props> = ({ handleInputChange, formData }) => {
             <h2 className="font-semibold text-lg pb-10 pt-6">Vista previa del documento:</h2>
             <div id="document-1-template" className="w-full">
                 <div className="flex justify-between items-center w-full">
-                    <Image src="/logo.jpg" alt="logo" width={100} height={100} className="w-1/6"/>
+                    <Image src="/logo.jpg" alt="logo" width={300} height={300} className="w-1/6"/>
                     <h1 className="text-lg font-semibold w-5/6 text-center">Liberación de Responsabilidad de
-                        Exámenes</h1>
+                        Exámenes
+                    </h1>
                 </div>
                 <div className="w-full py-10">
                     <div className="w-full text-sm">

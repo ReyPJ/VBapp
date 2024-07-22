@@ -49,7 +49,7 @@ const FormulariosPage: React.FC = () => {
     };
 
     return (
-        <div className="container mx-auto">
+        <div className="container flex flex-col mx-auto">
             <h1 className="text-2xl font-semibold">Documento a utilizar</h1>
             <select onChange={handleSelectChange} className="border p-2 mt-4">
                 <option value="">...</option>
