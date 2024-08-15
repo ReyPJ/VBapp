@@ -1,11 +1,8 @@
 'use client';
 import React, { useState } from "react";
-import dynamic from "next/dynamic";
 import documentForms from "@/app/utils/documentForms";
 import { formData } from "@/app/interfaces/templates";
 import Link from 'next/link';
-
-const html2pdfPromise = dynamic(() => import('html2pdf.js'), { ssr: false });
 
 const FormulariosPage: React.FC = () => {
     const [selectedDocument, setSelectedDocument] = useState<string>('');
@@ -27,8 +24,7 @@ const FormulariosPage: React.FC = () => {
 
     const generatePDF = async() => {
         const documentConfig = documentForms[selectedDocument];
-        const html2pdfModule = await html2pdfPromise; // Wait for the dynamic import to resolve
-        const html2pdf = html2pdfModule.default || html2pdfModule; // Access the default export if it exists
+        const html2pdf = (await import('html2pdf.js')).default; // Import html2pdf.js dynamically
 
         setTimeout(() => {
             const element = document.getElementById(documentConfig.templateId);
