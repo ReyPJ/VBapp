@@ -1,9 +1,11 @@
 'use client';
 import React, { useState } from "react";
-import html2pdf from "html2pdf.js";
+import dynamic from "next/dynamic";
 import documentForms from "@/app/utils/documentForms";
 import { formData } from "@/app/interfaces/templates";
 import Link from 'next/link';
+
+const html2pdfPromise = dynamic(() => import('html2pdf.js').then(mod => mod.default), { ssr: false });
 
 const FormulariosPage: React.FC = () => {
     const [selectedDocument, setSelectedDocument] = useState<string>('');
@@ -25,6 +27,7 @@ const FormulariosPage: React.FC = () => {
 
     const generatePDF = () => {
         const documentConfig = documentForms[selectedDocument];
+        const html2pdf = html2pdfPromise;
         setTimeout(() => {
             const element = document.getElementById(documentConfig.templateId);
             if (element) {
