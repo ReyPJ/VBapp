@@ -5,7 +5,7 @@ import documentForms from "@/app/utils/documentForms";
 import { formData } from "@/app/interfaces/templates";
 import Link from 'next/link';
 
-const html2pdfPromise = dynamic(() => import('html2pdf.js').then(mod => mod.default), { ssr: false });
+const html2pdfPromise = dynamic(() => import('html2pdf.js'), { ssr: false });
 
 const FormulariosPage: React.FC = () => {
     const [selectedDocument, setSelectedDocument] = useState<string>('');
@@ -25,9 +25,11 @@ const FormulariosPage: React.FC = () => {
         generatePDF();
     }
 
-    const generatePDF = () => {
+    const generatePDF = async() => {
         const documentConfig = documentForms[selectedDocument];
-        const html2pdf = html2pdfPromise;
+        const html2pdfModule = await html2pdfPromise; // Wait for the dynamic import to resolve
+        const html2pdf = html2pdfModule.default || html2pdfModule; // Access the default export if it exists
+
         setTimeout(() => {
             const element = document.getElementById(documentConfig.templateId);
             if (element) {
