@@ -1,5 +1,5 @@
-import React from "react";
-import { Document5FormData} from "@/app/interfaces/templates";
+import React, {useState} from "react";
+import { Document5FormData } from "@/app/interfaces/templates";
 
 interface Props {
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -7,137 +7,82 @@ interface Props {
 }
 
 const Document5form: React.FC<Props> = ({ handleInputChange, formData }) => {
+    const [currentSection, setCurrentSection] = useState<number>(1);
+
+    const nextSection = () => {
+        if (currentSection < 3) setCurrentSection(currentSection + 1);
+    }
+
+    const prevSection = () => {
+        if (currentSection > 1) setCurrentSection(currentSection - 1);
+    }
+
+    const section1Fields: { name: keyof Document5FormData; placeholder: string }[] = [
+        { name: 'dia', placeholder: 'Dia'},
+        { name: 'mes', placeholder: 'Mes'},
+        { name: 'year', placeholder: 'Año'},
+        { name: 'nombre', placeholder: 'Nombre del Dueño'},
+        { name: 'cedula', placeholder: 'Cedula'}
+    ]
+
+    const section2Fields: { name: keyof Document5FormData; placeholder: string }[] = [
+        { name: 'direccion', placeholder: 'Direccion'},
+        { name: 'telefono', placeholder: 'Telefono'},
+        { name: 'mascota', placeholder: 'Mascota'},
+        { name: 'especie', placeholder: 'Especie'},
+        { name: 'sexo', placeholder: 'Sexo'}
+    ]
+
+    const section3Fields: { name: keyof Document5FormData; placeholder: string }[] = [
+        { name: 'raza', placeholder: 'Raza'},
+        { name: 'edad', placeholder: 'Edad'},
+        { name: 'color', placeholder: 'Color'},
+        { name: 'medico_veterinario', placeholder: 'Medico Veterinario'},
+        { name: 'num_colegiado', placeholder: 'Num de Colegiado'},
+        { name: 'diagnostico', placeholder: 'Diagnostico'}
+    ]
+
+    const renderFields = (fields: { name: keyof Document5FormData; placeholder: string }[]) => (
+        fields.map((field) => (
+            <input
+                key={field.name}
+                type="text"
+                name={field.name}
+                value={formData[field.name] || ''}
+                onChange={handleInputChange}
+                placeholder={field.placeholder}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200 ease-in-out"
+            />
+        ))
+    );
+
     return (
         <>
             <div className="space-y-4 py-8">
-                <input
-                    type="text"
-                    name="dia"
-                    value={formData.dia}
-                    onChange={handleInputChange}
-                    placeholder="Dia"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="mes"
-                    value={formData.mes}
-                    onChange={handleInputChange}
-                    placeholder="Mes"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="year"
-                    value={formData.year}
-                    onChange={handleInputChange}
-                    placeholder="Año"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleInputChange}
-                    placeholder="Nombre Dueño"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="cedula"
-                    value={formData.cedula}
-                    onChange={handleInputChange}
-                    placeholder="Cedula"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="direccion"
-                    value={formData.direccion}
-                    onChange={handleInputChange}
-                    placeholder="Direccion"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="telefono"
-                    value={formData.telefono}
-                    onChange={handleInputChange}
-                    placeholder="Numero de Telefono del cliente"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="mascota"
-                    value={formData.mascota}
-                    onChange={handleInputChange}
-                    placeholder="Mascota"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="especie"
-                    value={formData.especie}
-                    onChange={handleInputChange}
-                    placeholder="Especie"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="sexo"
-                    value={formData.sexo}
-                    onChange={handleInputChange}
-                    placeholder="Sexo"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="raza"
-                    value={formData.raza}
-                    onChange={handleInputChange}
-                    placeholder="Raza"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="edad"
-                    value={formData.edad}
-                    onChange={handleInputChange}
-                    placeholder="Edad"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="color"
-                    value={formData.color}
-                    onChange={handleInputChange}
-                    placeholder="Color del Pelaje"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="medico_veterinario"
-                    value={formData.medico_veterinario}
-                    onChange={handleInputChange}
-                    placeholder="Nombre del Medico Veterinario"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="num_colegiado"
-                    value={formData.num_colegiado}
-                    onChange={handleInputChange}
-                    placeholder="Numero de Colegiado"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="diagnostico"
-                    value={formData.diagnostico}
-                    onChange={handleInputChange}
-                    placeholder="Diagnostico"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                {currentSection === 1 && renderFields(section1Fields)}
+                {currentSection === 2 && renderFields(section2Fields)}
+                {currentSection === 3 && renderFields(section3Fields)}
+
+                <div className="flex justify-between mt-4">
+                    {currentSection > 1 && (
+                        <button
+                            type="button"
+                            onClick={prevSection}
+                            className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        >
+                            Anterior
+                        </button>
+                    )}
+                    {currentSection < 3 && (
+                        <button
+                            type="button"
+                            onClick={nextSection}
+                            className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                        >
+                            Siguiente
+                        </button>
+                    )}
+                </div>
             </div>
             <h2 className="font-semibold text-lg pb-10 pt-6">Vista previa del documento:</h2>
             <div id="document-5-template" className="w-full">
@@ -145,11 +90,13 @@ const Document5form: React.FC<Props> = ({ handleInputChange, formData }) => {
                     <h1 className="text-lg font-bold w-5/6 underline">AUTORIZACIÓN DE EUTANASIA</h1>
                     <p>{formData.dia} de {formData.mes} del {formData.year}.</p>
                     <p>
-                        Yo, {formData.nombre}, con el número de indentificación {formData.cedula}, domicialiado en {formData.direccion},
+                        Yo, {formData.nombre}, con el número de indentificación {formData.cedula}, domicialiado
+                        en {formData.direccion},
                         con el número de telefono {formData.telefono}.
                     </p>
                     <p>
-                        Propietario de (nombre del animal) {formData.mascota}, especie {formData.especie}, sexo {formData.sexo},
+                        Propietario de (nombre del animal) {formData.mascota}, especie {formData.especie},
+                        sexo {formData.sexo},
                         edad {formData.edad}, raza {formData.raza}, colo del pelaje {formData.color}.
                     </p>
                     <p>

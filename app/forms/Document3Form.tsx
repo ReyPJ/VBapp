@@ -11,7 +11,7 @@ const Document3form: React.FC<Props> = ({ handleInputChange, formData }) => {
     const [currentSection, setCurrentSection] = useState<number>(1);
 
     const nextSection = () => {
-        if (currentSection < 2) setCurrentSection(currentSection + 1);
+        if (currentSection < 3) setCurrentSection(currentSection + 1);
     };
 
     const prevSection = () => {
@@ -34,6 +34,9 @@ const Document3form: React.FC<Props> = ({ handleInputChange, formData }) => {
         { name: 'telefono', placeholder: 'Teléfono' },
         { name: 'email', placeholder: 'Correo Electrónico' },
         { name: 'fecha_admision', placeholder: 'Fecha de Admisión' },
+    ];
+
+    const section3Fields: { name: keyof Document3FormData; placeholder: string }[] = [
         { name: 'fecha_salida', placeholder: 'Fecha de Salida' },
         { name: 'motivo_admision', placeholder: 'Motivo de Admisión' },
         { name: 'diagnostico', placeholder: 'Diagnóstico' },
@@ -59,6 +62,7 @@ const Document3form: React.FC<Props> = ({ handleInputChange, formData }) => {
             <div className="space-y-4 py-8">
                 {currentSection === 1 && renderFields(section1Fields)}
                 {currentSection === 2 && renderFields(section2Fields)}
+                {currentSection === 3 && renderFields(section3Fields)}
 
                 <div className="flex justify-between mt-4">
                     {currentSection > 1 && (
@@ -70,7 +74,7 @@ const Document3form: React.FC<Props> = ({ handleInputChange, formData }) => {
                             Anterior
                         </button>
                     )}
-                    {currentSection < 2 && (
+                    {currentSection < 3 && (
                         <button
                             type="button"
                             onClick={nextSection}

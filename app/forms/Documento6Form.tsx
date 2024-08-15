@@ -1,5 +1,5 @@
-import React from "react";
-import { Document6FormData } from "@/app/interfaces/templates";
+import React, {useState} from "react";
+import {Document6FormData} from "@/app/interfaces/templates";
 
 interface Props {
     handleInputChange: (e: React.FormEvent<HTMLInputElement>) => void;
@@ -7,145 +7,82 @@ interface Props {
 }
 
 const Document6form: React.FC<Props> = ({ handleInputChange, formData }) => {
+    const [currentSection, setCurrentSection] = useState<number>(1);
+
+    const nextSection = () => {
+        if (currentSection < 3) setCurrentSection(currentSection + 1);
+    };
+
+    const prevSection = () => {
+        if (currentSection > 1) setCurrentSection(currentSection - 1);
+    };
+
+    const section1Fields: { name: keyof Document6FormData; placeholder: string }[] = [
+        { name: 'num_consecutivo', placeholder: '# Consecutivo' },
+        { name: 'dia', placeholder: 'Dia' },
+        { name: 'mes', placeholder: 'Mes' },
+        { name: 'year', placeholder: 'Año' },
+        { name: 'nombre', placeholder: 'Nombre Dueño' },
+        { name: 'cedula', placeholder: 'Cedula' },
+    ];
+
+    const section2Fields: { name: keyof Document6FormData; placeholder: string }[] = [
+        { name: 'telefono', placeholder: 'Numero de Telefono del cliente' },
+        { name: 'mascota', placeholder: 'Mascota' },
+        { name: 'especie', placeholder: 'Especie' },
+        { name: 'sexo', placeholder: 'Sexo' },
+        { name: 'raza', placeholder: 'Raza' },
+    ];
+
+    const section3Fields: { name: keyof Document6FormData; placeholder: string }[] = [
+        { name: 'edad', placeholder: 'Edad' },
+        { name: 'color', placeholder: 'Color del Pelaje' },
+        { name: 'medico_veterinario', placeholder: 'Nombre del Medico Veterinario' },
+        { name: 'num_colegiado', placeholder: 'Numero de Colegiado' },
+        { name: 'procedimiento', placeholder: 'Procedimiento a Realizar' },
+    ];
+
+    const renderFields = (fields: { name: keyof Document6FormData; placeholder: string }[]) => (
+        fields.map((field) => (
+            <input
+                key={field.name}
+                type="text"
+                name={field.name}
+                value={formData[field.name] || ''}
+                onChange={handleInputChange}
+                placeholder={field.placeholder}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-200 ease-in-out"
+            />
+        ))
+    );
+
     return (
         <>
             <div className="space-y-4 py-8">
-                <input
-                    type="text"
-                    name="num_consecutivo"
-                    value={formData.num_consecutivo}
-                    onChange={handleInputChange}
-                    placeholder="# Consecutivo"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="dia"
-                    value={formData.dia}
-                    onChange={handleInputChange}
-                    placeholder="Dia"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="mes"
-                    value={formData.mes}
-                    onChange={handleInputChange}
-                    placeholder="Mes"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="year"
-                    value={formData.year}
-                    onChange={handleInputChange}
-                    placeholder="Año"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleInputChange}
-                    placeholder="Nombre Dueño"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="cedula"
-                    value={formData.cedula}
-                    onChange={handleInputChange}
-                    placeholder="Cedula"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="telefono"
-                    value={formData.telefono}
-                    onChange={handleInputChange}
-                    placeholder="Numero de Telefono del cliente"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="mascota"
-                    value={formData.mascota}
-                    onChange={handleInputChange}
-                    placeholder="Mascota"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="especie"
-                    value={formData.especie}
-                    onChange={handleInputChange}
-                    placeholder="Especie"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="sexo"
-                    value={formData.sexo}
-                    onChange={handleInputChange}
-                    placeholder="Sexo"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="raza"
-                    value={formData.raza}
-                    onChange={handleInputChange}
-                    placeholder="Raza"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="edad"
-                    value={formData.edad}
-                    onChange={handleInputChange}
-                    placeholder="Edad"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="color"
-                    value={formData.color}
-                    onChange={handleInputChange}
-                    placeholder="Color del Pelaje"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="medico_veterinario"
-                    value={formData.medico_veterinario}
-                    onChange={handleInputChange}
-                    placeholder="Nombre del Medico Veterinario"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="num_colegiado"
-                    value={formData.num_colegiado}
-                    onChange={handleInputChange}
-                    placeholder="Numero de Colegiado"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    name="procedimiento"
-                    value={formData.procedimiento}
-                    onChange={handleInputChange}
-                    placeholder="Procedimiento a Realizar"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {/*<input*/}
-                {/*    type="text"*/}
-                {/*    name="fecha_salida"*/}
-                {/*    value={formData.fecha_salida}*/}
-                {/*    onChange={handleInputChange}*/}
-                {/*    placeholder="Fecha de salida"*/}
-                {/*    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"*/}
-                {/*/>*/}
+                {currentSection === 1 && renderFields(section1Fields)}
+                {currentSection === 2 && renderFields(section2Fields)}
+                {currentSection === 3 && renderFields(section3Fields)}
+
+                <div className="flex justify-between mt-4">
+                    {currentSection > 1 && (
+                        <button
+                            type="button"
+                            onClick={prevSection}
+                            className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        >
+                            Anterior
+                        </button>
+                    )}
+                    {currentSection < 3 && (
+                        <button
+                            type="button"
+                            onClick={nextSection}
+                            className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+                        >
+                            Siguiente
+                        </button>
+                    )}
+                </div>
             </div>
             <h2 className="font-semibold text-lg pb-10 pt-6">Vista previa del documento:</h2>
             <div id="document-6-template" className="w-full">

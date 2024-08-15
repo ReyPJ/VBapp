@@ -9,9 +9,9 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-    { id: 1, title: 'PDF Dinámicos', description: 'Servicio de generador de PDF', link: '/formularios' },
-    { id: 2, title: 'Próximamente', description: 'Próximamente', link: '#' },
-    { id: 3, title: 'Próximamente', description: 'Próximamente', link: '#' },
+    { id: 1, title: 'Documentos', description: 'Generacion de decumentos para clientes', link: '/formularios' },
+    { id: 2, title: 'Internados', description: 'En progreso de desarrollo', link: '#' },
+    { id: 3, title: 'Tareas', description: 'En progreso de desarrollo', link: '#' },
 ];
 
 const Home: React.FC = () => {

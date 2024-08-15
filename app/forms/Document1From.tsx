@@ -1,5 +1,5 @@
 import React from "react";
-import { Document1FormData} from "@/app/interfaces/templates";
+import { Document1FormData } from "@/app/interfaces/templates";
 import Image from "next/image";
 
 interface Props {
