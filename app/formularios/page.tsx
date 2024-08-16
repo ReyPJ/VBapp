@@ -24,7 +24,7 @@ const FormulariosPage: React.FC = () => {
 
     const generatePDF = async() => {
         const documentConfig = documentForms[selectedDocument];
-        const html2pdf = (await import('html2pdf.js')).default; // Import html2pdf.js dynamically
+        const html2pdf = (await import('html2pdf.js')).default;
 
         setTimeout(() => {
             const element = document.getElementById(documentConfig.templateId);
