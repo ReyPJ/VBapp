@@ -58,12 +58,16 @@ const Document7form: React.FC<Props> = ({ handleInputChange, formData }) => {
             <h2 className="font-semibold text-lg pb-10 pt-6">Vista previa del documento:</h2>
             <div id="document-7-template" className="w-full">
                 <div className="w-full flex flex-col gap-4">
-                    <div className='flex justify-between items-center'>
-                        <Image src="/logo1.png" alt="logo" width={300} height={300} className="w-2/4"/>
-                        <div className='flex flex-col'>
-                            <span className="text-2xl flex items-center gap-1"><MdPhoneInTalk />2100 2193</span>
-                            <span className="text-2xl flex items-center gap-1"><FaWhatsapp />6087 7912 </span>
-                            <span className="text-2xl flex items-center gap-1"><CiLocationArrow1  />Alajuela, El llano</span>
+                    <div className='flex flex-col md:flex-row justify-between items-center'>
+                        <div className="w-3/4 md:w-2/4">
+                            <Image src="/logo1.png" alt="logo" layout="responsive" width={300} height={300}
+                                   className="object-contain"/>
+                        </div>
+                        <div className='flex flex-col mt-4 md:mt-0'>
+                            <span className="text-2xl flex items-center gap-1"><MdPhoneInTalk/>2100 2193</span>
+                            <span className="text-2xl flex items-center gap-1"><FaWhatsapp/>6087 7912 </span>
+                            <span
+                                className="text-2xl flex items-center gap-1"><CiLocationArrow1/>Alajuela, El llano</span>
                         </div>
                     </div>
                     <div className="text-base px-6 text-justify font-semibold">

@@ -89,7 +89,10 @@ const Document3form: React.FC<Props> = ({ handleInputChange, formData }) => {
             <h2 className="font-semibold text-lg pb-10 pt-6">Vista previa del documento:</h2>
             <div id="document-3-template" className="w-full">
                 <div className="flex flex-col mb-3 gap-3 pt-0 justify-center items-center w-full">
-                    <Image src="/logo.jpg" alt="logo" width={100} height={100} className="w-1/6"/>
+                    <div className="w-1/3 md:w-1/6">
+                        <Image src="/logo.jpg" alt="logo" layout="responsive" width={100} height={100}
+                               className="object-contain"/>
+                    </div>
                     <h1 className="text-base font-semibold w-5/6 text-center">Centro Veterinario VB</h1>
                 </div>
                 <div className="text-xs flex py-2 flex-col gap-2">
