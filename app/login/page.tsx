@@ -34,7 +34,7 @@ export default function LoginPage() {
 
             Cookies.set('accessToken', access, { expires: 1 });
 
-            if (username === 'Rey') {
+            if (username === 'admin') {
                 Cookies.set('isAdmin', 'true', { expires: 1 });
             } else {
                 Cookies.remove('isAdmin');
