@@ -54,6 +54,7 @@ export default function LoginPage() {
                     console.error('Error al establecer la cookie de administrador:', error);
                 }
             } else {
+                Cookies.remove('isAdmin');
                 window.location.href = '/';
             }
         } catch (err) {
