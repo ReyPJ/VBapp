@@ -35,26 +35,19 @@ export default function LoginPage() {
             Cookies.set('accessToken', access, { expires: 1 });
 
             if (username === 'admin' || username === 'dev') {
-                try {
-                    const responseCookie = await fetch('https://vbappback-74cfafa1439d.herokuapp.com/api/set-admin-cookie/', {
-                        method: 'GET',
-                        credentials: 'include'  // Asegura que las cookies se envíen en la solicitud
-                    });
+                await fetch('https://vbappback-74cfafa1439d.herokuapp.com/api/set-admin-cookie/', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
 
-                    if (responseCookie.ok) {
-                        console.log('Cookie de administrador establecida:', await responseCookie.text());
-                    } else {
-                        console.error('Error al establecer la cookie de administrador:', responseCookie.statusText);
-                    }
-                } catch (error) {
-                    console.error('Error al establecer la cookie de administrador:', error);
-                }
+                console.log('Cookie isAdmin después de establecerla:', Cookies.get('isAdmin'));
             } else {
                 Cookies.remove('isAdmin');
             }
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 1000);
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            window.location.href = '/';
+
         } catch (err) {
             setError('Contraseña incorrecta');
         }
