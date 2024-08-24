@@ -38,22 +38,30 @@ export default function LoginPage() {
                 try {
                     const responseCookie = await fetch('https://vbappback-74cfafa1439d.herokuapp.com/api/set-admin-cookie/', {
                         method: 'GET',
-                        credentials: 'include'
+                        credentials: 'include'  // Asegura que las cookies se envíen en la solicitud
                     });
-                    console.log('Cookie de administrador establecida:', await responseCookie.text());
+
+                    if (responseCookie.ok) {
+                        console.log('Cookie de administrador establecida:', await responseCookie.text());
+                        // Espera un momento antes de redirigir para asegurar que la cookie se haya establecido
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 1000);
+                    } else {
+                        console.error('Error al establecer la cookie de administrador:', responseCookie.statusText);
+                    }
                 } catch (error) {
                     console.error('Error al establecer la cookie de administrador:', error);
                 }
             } else {
                 Cookies.remove('isAdmin');
+                window.location.href = '/';
             }
-
-            window.location.href = '/';
-
         } catch (err) {
             setError('Contraseña incorrecta');
         }
     }
+
 
     const togglePasswordVisibility = () => {
         setShowPassword(prevState => !prevState);
