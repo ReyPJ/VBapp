@@ -43,10 +43,6 @@ export default function LoginPage() {
 
                     if (responseCookie.ok) {
                         console.log('Cookie de administrador establecida:', await responseCookie.text());
-                        // Espera un momento antes de redirigir para asegurar que la cookie se haya establecido
-                        setTimeout(() => {
-                            window.location.href = '/';
-                        }, 1000);
                     } else {
                         console.error('Error al establecer la cookie de administrador:', responseCookie.statusText);
                     }
@@ -55,8 +51,10 @@ export default function LoginPage() {
                 }
             } else {
                 Cookies.remove('isAdmin');
-                window.location.href = '/';
             }
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
         } catch (err) {
             setError('Contraseña incorrecta');
         }
