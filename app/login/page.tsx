@@ -36,8 +36,11 @@ export default function LoginPage() {
 
             if (username === 'admin' || username === 'dev') {
                 try {
-                    const responseCookie = await api.get('set-admin-cookie/');
-                    console.log('Cookie de administrador establecida:', responseCookie);
+                    const responseCookie = await fetch('https://vbappback-74cfafa1439d.herokuapp.com/api/set-admin-cookie/', {
+                        method: 'GET',
+                        credentials: 'include'
+                    });
+                    console.log('Cookie de administrador establecida:', await responseCookie.text());
                 } catch (error) {
                     console.error('Error al establecer la cookie de administrador:', error);
                 }
@@ -45,7 +48,7 @@ export default function LoginPage() {
                 Cookies.remove('isAdmin');
             }
 
-            window.location.href = '/';
+
 
         } catch (err) {
             setError('Contraseña incorrecta');
