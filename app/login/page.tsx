@@ -36,7 +36,7 @@ export default function LoginPage() {
 
             if (username === 'admin' || username === 'dev') {
                 try {
-                    const responseCookie = await api.get('set-admin-cookie');
+                    const responseCookie = await api.get('set-admin-cookie/');
                     console.log('Cookie de administrador establecida:', responseCookie);
                 } catch (error) {
                     console.error('Error al establecer la cookie de administrador:', error);
