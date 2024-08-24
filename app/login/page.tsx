@@ -48,7 +48,7 @@ export default function LoginPage() {
                 Cookies.remove('isAdmin');
             }
 
-
+            window.location.href = '/';
 
         } catch (err) {
             setError('Contraseña incorrecta');
