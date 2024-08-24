@@ -34,8 +34,13 @@ export default function LoginPage() {
 
             Cookies.set('accessToken', access, { expires: 1 });
 
-            if (username === 'admin') {
-                Cookies.set('isAdmin', 'true', { expires: 1 });
+            if (username === 'admin' || username === 'dev') {
+                try {
+                    const responseCookie = await api.get('set-admin-cookie');
+                    console.log('Cookie de administrador establecida:', responseCookie);
+                } catch (error) {
+                    console.error('Error al establecer la cookie de administrador:', error);
+                }
             } else {
                 Cookies.remove('isAdmin');
             }
