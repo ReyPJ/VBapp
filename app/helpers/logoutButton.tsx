@@ -6,8 +6,8 @@ const LogoutButton = () => {
     const router = useRouter();
     const handleLogout = () => {
         Cookies.remove('accessToken');
-        if (Cookies.get('isAdmin')) {
-            Cookies.remove('isAdmin');
+        if (Cookies.get('userRole')) {
+            Cookies.remove('userRole');
         }
         router.push('/login');
     }

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { AiOutlineEye, AiOutlineEyeInvisible} from "react-icons/ai";
 import api from '@/app/utils/api';
 import Cookies from "js-cookie";
+import {jwtDecode} from "jwt-decode";
 
 export default function LoginPage() {
     const [usernames, setUsernames] = useState<{ username: string }[]>([]);
@@ -32,22 +33,15 @@ export default function LoginPage() {
             const response = await api.post('token/', { username, password });
             const { access } = response.data;
 
+            const decodedToken: any = jwtDecode(access);
+
+            const role = decodedToken.role || 'user';
             Cookies.set('accessToken', access, { expires: 1 });
+            Cookies.set('userRole', role, { expires: 1 });
 
-            if (username === 'admin' || username === 'dev') {
-                await fetch('https://vbappback-74cfafa1439d.herokuapp.com/api/set-admin-cookie/', {
-                    method: 'GET',
-                    credentials: 'include'
-                });
-
-                console.log('Cookie isAdmin después de establecerla:', Cookies.get('isAdmin'));
-            } else {
-                Cookies.remove('isAdmin');
-            }
-
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            window.location.href = '/';
-
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 500);
         } catch (err) {
             setError('Contraseña incorrecta');
         }

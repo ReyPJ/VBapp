@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React from "react";
 import {cookies} from "next/headers";
 import LogoutButton from "@/app/helpers/logoutButton";
+import DashboardButton from "@/app/helpers/dashboardButton";
 
 interface MenuItem {
     id: number;
@@ -13,30 +14,25 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
     {id: 1, title: 'Documentos', description: 'Generacion de decumentos para clientes', link: '/formularios'},
     {id: 2, title: 'Internados', description: 'En progreso de desarrollo', link: '#'},
-    {id: 3, title: 'Tareas', description: 'En progreso de desarrollo', link: '#'},
+    {id: 3, title: 'Tareas', description: 'En progreso de desarrollo', link: '/tasks'},
 ];
 
 const Home: React.FC = () => {
 
-    const isAdmin = cookies().get('isAdmin')?.value === 'true';
     const token = cookies().get('accessToken')?.value;
     const isLogged = token && token.trim() !== '';
+    const isAdmin = cookies().get('userRole')?.value === 'admin';
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-100">
             {isLogged && (
                 <LogoutButton />
             )}
-            {isAdmin && (
-                <div className="mb-8">
-                    <Link
-                        href={"/dashboard"}
-                        className="inline-block border border-red-500 rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow bg-white hover:bg-red-100 text-center text-red-500 font-bold text-xl"
-                    >
-                        Panel de Administrador
-                    </Link>
-                </div>
-            )}
+            <div className="mb-8">
+                {isAdmin && (
+                    <DashboardButton />
+                )}
+            </div>
             <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {menuItems.map((item) => (
                     <Link key={item.id} href={item.link}>

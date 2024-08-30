@@ -30,13 +30,13 @@ const UserListComponent: React.FC = () => {
     }, []);
 
     const handleUserClick = (userId: number) => {
-        router.push(`/users/${userId}/`);
+        router.push(`users/${userId}/`);
     };
 
     return (
         <div className="w-full bg-white border border-gray-300 rounded-lg shadow-md p-4 max-h-[500px] overflow-y-auto">
             <h2 className="text-xl font-semibold mb-4">Lista de Usuarios</h2>
-            {users.map((user) => (
+            {users.map((user: UsersList) => (
                 <div
                     key={user.id}
                     className="p-4 border-b last:border-b-0 border-gray-300 cursor-pointer hover:bg-gray-100"
