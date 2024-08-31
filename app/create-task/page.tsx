@@ -15,6 +15,7 @@ const CreateTaskPage: React.FC = () => {
         help_image: undefined,
         is_recurrent: false,
         recurrent_period: undefined,
+        recurrent_days: 1,
     });
 
     const router = useRouter();
@@ -70,7 +71,7 @@ const CreateTaskPage: React.FC = () => {
 
     return (
         <main className="flex flex-col items-center justify-center p-8 bg-gray-100 min-h-screen">
-            <Link href="/" className="underline text-red-600 hover:text-red-700 mb-8 block text-center">
+            <Link href={"/tasks"} className="underline text-red-600 hover:text-red-700 mb-8 block text-center">
                 Regresar
             </Link>
             <h1 className="text-3xl font-bold text-red-600 mb-8">Crear Nueva Tarea</h1>
@@ -121,17 +122,30 @@ const CreateTaskPage: React.FC = () => {
                         Recurrente
                     </label>
                     {formData.is_recurrent && (
-                        <div className="mt-2">
-                            <label className="block text-gray-700 font-bold mb-2">Cada cuanto? (hh:mm:ss)</label>
-                            <input
-                                type="text"
-                                name="recurrent_period"
-                                value={formData.recurrent_period || ''}
-                                onChange={handleInputChange}
-                                step="1"
-                                className="w-full border border-gray-300 p-2 rounded"
-                            />
-                        </div>
+                        <>
+                            <div className="mt-4">
+                                <label className="block text-gray-700 font-bold mb-2">Cada cuantas horas? (hh:mm:ss)</label>
+                                <input
+                                    type="text"
+                                    name="recurrent_period"
+                                    value={formData.recurrent_period || ''}
+                                    onChange={handleInputChange}
+                                    step="1"
+                                    className="w-full border border-gray-300 p-2 rounded"
+                                />
+                            </div>
+                            <div className="mt-4">
+                               <label className="block text-gray-700 font-bold mb-2">Por cuantos dias?</label>
+                                <input
+                                    type="text"
+                                    name="recurrent_days"
+                                    value={formData.recurrent_days || 1}
+                                    onChange={handleInputChange}
+                                    step="1"
+                                    className="w-full border border-gray-300 p-2 rounded"
+                                />
+                            </div>
+                        </>
                     )}
                 </div>
                 <div className="mb-4">

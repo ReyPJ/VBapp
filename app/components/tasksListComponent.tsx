@@ -29,6 +29,7 @@ const TasksListComponent: React.FC = () => {
         fetchTasksData().catch((error) => {
             console.error('ErrorFetching:', error);
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const getPriorityLabel = (priority: number) => {
@@ -48,51 +49,62 @@ const TasksListComponent: React.FC = () => {
     const handleTaskClick = (taskId: number) => {
         router.push(`tasks/${taskId}/`);
     };
-
-    return (
+ return (
         <div className="flex flex-col items-center p-4 bg-gray-100 min-h-screen">
             <h2 className="text-2xl font-bold text-red-600 mb-4">Lista de Tareas</h2>
             <TaskNav />
             <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-4">
                 {tasks.length > 0 ? (
-                    tasks.map((task: TasksListInterface) => (
-                        <div
-                            key={task.id}
-                            className="flex justify-between items-center p-2 mb-2 border-b border-gray-200 hover:bg-gray-200 transition-colors"
-                        >
-                            <div>
-                                <h3 className="text-sm font-semibold text-gray-800">{task.title}</h3>
-                                <p className="text-xs text-gray-600 px-1">Creado: {new Date(task.created_date).toLocaleDateString()}</p>
-                                <div className="flex gap-2">
-                                    <p className={`text-xs font-semibold rounded px-2 py-1 mt-1 inline-block ${getPriorityLabel(task.priority).color}`}>
-                                        {getPriorityLabel(task.priority).text}
-                                    </p>
-                                    {!task.is_completed && (
-                                        <p className="text-xs font-semibold rounded px-2 py-1 mt-1 inline-block bg-yellow-100 text-yellow-600">
-                                            En Progreso
-                                        </p>
-                                    )}
-                                    {task.is_completed && (
-                                        <p className="text-xs font-semibold rounded px-2 py-1 mt-1 inline-block bg-green-100 text-green-600">
-                                            Completado
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-                            <button
-                                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
-                                onClick={() => handleTaskClick(task.id)}
+                    tasks.map((task: TasksListInterface) => {
+                        const completedInstancesCount = task.instances?.filter(instance => instance.is_completed).length || 0;
+
+                        return (
+                            <div
+                                key={task.id}
+                                className="flex justify-between items-center p-2 mb-2 border-b border-gray-200 hover:bg-gray-200 transition-colors"
                             >
-                                Ver detalles
-                            </button>
-                        </div>
-                    ))
+                                <div>
+                                    <h3 className="text-sm font-semibold text-gray-800">
+                                        {task.title}
+                                    </h3>
+                                    <p className="text-xs text-gray-600 px-1">Creado: {new Date(task.created_date).toLocaleDateString()}</p>
+                                    <div className="flex gap-2">
+                                        <p className={`text-xs font-semibold rounded px-2 py-1 mt-1 inline-block ${getPriorityLabel(task.priority).color}`}>
+                                            {getPriorityLabel(task.priority).text}
+                                        </p>
+                                        {/*@ts-ignore*/}
+                                        {!task.is_completed && task.instances && task.instances.length === 0 && (
+                                            <p className="text-xs font-semibold rounded px-2 py-1 mt-1 inline-block bg-yellow-100 text-yellow-600">
+                                                En Progreso
+                                            </p>
+                                        )}
+                                        {!task.is_completed && task.instances && task.instances.length > 0 && (
+                                            <p className="text-xs font-semibold rounded px-2 py-1 mt-1 inline-block bg-yellow-100 text-yellow-600">
+                                                En Progreso [{completedInstancesCount}/{task.instances.length}]
+                                            </p>
+                                        )}
+                                        {task.is_completed && (
+                                            <p className="text-xs font-semibold rounded px-2 py-1 mt-1 inline-block bg-green-100 text-green-600">
+                                                Completado
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                                <button
+                                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
+                                    onClick={() => handleTaskClick(task.id)}
+                                >
+                                    Ver detalles
+                                </button>
+                            </div>
+                        );
+                    })
                 ) : (
                     <p className="text-gray-600 text-center">No hay tareas disponibles.</p>
                 )}
             </div>
         </div>
-    );
+ );
 };
 
 export default TasksListComponent;

@@ -22,13 +22,12 @@ export default function TaskDetailPage() {
         const fetchTaskData = async () => {
             try {
                 const token = Cookies.get("accessToken");
-                const response = await api.get<TasksListInterface>(`tasks/${id}/detail`, {
+                const response = await api.get<TasksListInterface>(`tasks/${id}/detail/`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     },
                 });
                 setTask(response.data);
-                console.log(response.data)
             } catch (error) {
                 console.error("Error al obtener los detalles de la tarea:", error);
             }
@@ -79,8 +78,12 @@ export default function TaskDetailPage() {
         try {
             const token = Cookies.get("accessToken");
             const formData = new FormData();
+            const instanceId = task?.instances?.find((instance) => !instance.is_completed)?.id;
             if(proofImage) {
                 formData.append('proof_image', proofImage);
+            }
+            if(instanceId) {
+                formData.append('instance_id', instanceId.toString());
             }
             await api.post(`tasks/${id}/mark-as-completed/`, formData, {
                 headers: {
@@ -102,6 +105,7 @@ export default function TaskDetailPage() {
 
     const isAdminOrStaff = Cookies.get("userRole") === "admin" || Cookies.get("userRole") === "staff";
 
+    // @ts-ignore
     return (
         <main className="flex items-center justify-center p-8 bg-gray-100 min-h-screen">
             <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg p-8 space-y-6">
@@ -206,6 +210,20 @@ export default function TaskDetailPage() {
                             height={400}
                             className="w-96 h-auto rounded-lg border border-gray-300 shadow-sm"
                         />
+                    </div>
+                )}
+                {task.instances && task.instances.length > 0 && (
+                    <div className="space-y-4 border border-gray-300 p-6 rounded-lg">
+                        <h3 className="text-base font-semibold text-gray-800">Repeticiones hasta completar la tarea:</h3>
+                        <ul className="space-y-3">
+                            {task.instances.map((instance) => (
+                                <li key={instance.id} className="flex justify-between items-center">
+                                    <p className="text-gray-600"><strong>Repetición-{instance.instance_number}</strong></p>
+                                    <p className="text-gray-600"><strong>Fecha programada:</strong> {new Date(instance.scheduled_time).toLocaleDateString()}</p>
+                                    <p className={`text-gray-600 font-semibold ${instance.is_completed ? 'text-green-600' : 'text-yellow-600'}`}>{instance.is_completed ? 'Completado' : 'En progreso'}</p>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 )}
                 <div className="flex justify-end">
