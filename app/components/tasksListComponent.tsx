@@ -14,7 +14,7 @@ const TasksListComponent: React.FC = () => {
         const fetchTasksData = async () => {
             try {
                 const token = Cookies.get("accessToken");
-                const response = await api.get<TasksListInterface[]>('tasks/', {
+                const response = await api.get<TasksListInterface[]>('tasks/?is_archived=false', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     },
@@ -31,6 +31,34 @@ const TasksListComponent: React.FC = () => {
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Fuction to mark a list of tasks as archived
+    const archiveCompletedTasks = async () => {
+        try{
+            const token = Cookies.get("accessToken");
+            const taskIds = tasks
+                .filter(task => task.is_completed && !task.is_archived)
+                .map(task => task.id);
+
+            if (taskIds.length > 0) {
+                await api.post('tasks/archive/', { task_ids: taskIds }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                });
+                const response = await api.get<TasksListInterface[]>('tasks/?is_archived=false', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                });
+                setTasks(response.data);
+            } else {
+                console.log("No hay tareas completadas para archivar.");
+            }
+        } catch (error) {
+            console.error("Error al archivar tareas:", error);
+        }
+    };
 
     const getPriorityLabel = (priority: number) => {
         switch (priority) {
@@ -50,60 +78,66 @@ const TasksListComponent: React.FC = () => {
         router.push(`tasks/${taskId}/`);
     };
  return (
-        <div className="flex flex-col items-center p-4 bg-gray-100 min-h-screen">
-            <h2 className="text-2xl font-bold text-red-600 mb-4">Lista de Tareas</h2>
-            <TaskNav />
-            <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-4">
-                {tasks.length > 0 ? (
-                    tasks.map((task: TasksListInterface) => {
-                        const completedInstancesCount = task.instances?.filter(instance => instance.is_completed).length || 0;
+     <div className="flex flex-col items-center p-4 bg-gray-100 min-h-screen">
+         <h2 className="text-2xl font-bold text-red-600 mb-4">Lista de Tareas</h2>
+         <TaskNav/>
+         <button
+             className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors mb-4"
+             onClick={archiveCompletedTasks}
+         >
+             Archivar Tareas Completadas
+         </button>
+         <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg p-4">
+             {tasks.length > 0 ? (
+                 tasks.map((task: TasksListInterface) => {
+                     const completedInstancesCount = task.instances?.filter(instance => instance.is_completed).length || 0;
 
-                        return (
-                            <div
-                                key={task.id}
-                                className="flex justify-between items-center p-2 mb-2 border-b border-gray-200 hover:bg-gray-200 transition-colors"
-                            >
-                                <div>
-                                    <h3 className="text-sm font-semibold text-gray-800">
-                                        {task.title}
-                                    </h3>
-                                    <p className="text-xs text-gray-600 px-1">Creado: {new Date(task.created_date).toLocaleDateString()}</p>
-                                    <div className="flex gap-2">
-                                        <p className={`text-xs font-semibold rounded px-2 py-1 mt-1 inline-block ${getPriorityLabel(task.priority).color}`}>
-                                            {getPriorityLabel(task.priority).text}
-                                        </p>
-                                        {/*@ts-ignore*/}
-                                        {!task.is_completed && task.instances && task.instances.length === 0 && (
-                                            <p className="text-xs font-semibold rounded px-2 py-1 mt-1 inline-block bg-yellow-100 text-yellow-600">
-                                                En Progreso
-                                            </p>
-                                        )}
-                                        {!task.is_completed && task.instances && task.instances.length > 0 && (
-                                            <p className="text-xs font-semibold rounded px-2 py-1 mt-1 inline-block bg-yellow-100 text-yellow-600">
-                                                En Progreso [{completedInstancesCount}/{task.instances.length}]
-                                            </p>
-                                        )}
-                                        {task.is_completed && (
-                                            <p className="text-xs font-semibold rounded px-2 py-1 mt-1 inline-block bg-green-100 text-green-600">
-                                                Completado
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
-                                <button
-                                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
-                                    onClick={() => handleTaskClick(task.id)}
-                                >
-                                    Ver detalles
-                                </button>
-                            </div>
-                        );
-                    })
-                ) : (
-                    <p className="text-gray-600 text-center">No hay tareas disponibles.</p>
-                )}
-            </div>
-        </div>
+                     return (
+                         <div
+                             key={task.id}
+                             className="flex justify-between items-center p-2 mb-2 border-b border-gray-200 hover:bg-gray-200 transition-colors"
+                         >
+                             <div>
+                                 <h3 className="text-sm font-semibold text-gray-800">
+                                     {task.title}
+                                 </h3>
+                                 <p className="text-xs text-gray-600 px-1">Creado: {new Date(task.created_date).toLocaleDateString()}</p>
+                                 <div className="flex gap-2">
+                                     <p className={`text-xs font-semibold rounded px-2 py-1 mt-1 inline-block ${getPriorityLabel(task.priority).color}`}>
+                                         {getPriorityLabel(task.priority).text}
+                                     </p>
+                                     {/*@ts-ignore*/}
+                                     {!task.is_completed && task.instances && task.instances.length === 0 && (
+                                         <p className="text-xs font-semibold rounded px-2 py-1 mt-1 inline-block bg-yellow-100 text-yellow-600">
+                                             En Progreso
+                                         </p>
+                                     )}
+                                     {!task.is_completed && task.instances && task.instances.length > 0 && (
+                                         <p className="text-xs font-semibold rounded px-2 py-1 mt-1 inline-block bg-yellow-100 text-yellow-600">
+                                             En Progreso [{completedInstancesCount}/{task.instances.length}]
+                                         </p>
+                                     )}
+                                     {task.is_completed && (
+                                         <p className="text-xs font-semibold rounded px-2 py-1 mt-1 inline-block bg-green-100 text-green-600">
+                                             Completado
+                                         </p>
+                                     )}
+                                 </div>
+                             </div>
+                             <button
+                                 className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
+                                 onClick={() => handleTaskClick(task.id)}
+                             >
+                                 Ver detalles
+                             </button>
+                         </div>
+                     );
+                 })
+             ) : (
+                 <p className="text-gray-600 text-center">No hay tareas disponibles.</p>
+             )}
+         </div>
+     </div>
  );
 };
 

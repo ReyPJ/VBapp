@@ -6,7 +6,7 @@ import CreateUserComponent from "@/app/components/createuserformComponent";
 export default function DashboardPage() {
     return (
         <main className="flex flex-col items-center p-6 bg-gray-100 min-h-screen">
-            <Link href="/" className="underline text-red-600 hover:text-red-700 mb-8">
+            <Link href={"/"} className="underline text-red-600 hover:text-red-700 mb-8">
                 Regresar
             </Link>
             <h1 className="text-3xl font-bold mb-6 text-gray-800">

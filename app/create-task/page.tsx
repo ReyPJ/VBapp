@@ -14,9 +14,11 @@ const CreateTaskPage: React.FC = () => {
         is_completed: false,
         help_image: undefined,
         is_recurrent: false,
-        recurrent_period: undefined,
+        recurrent_period: '',
         recurrent_days: 1,
     });
+
+    const [errors, setErrors] = useState<{ recurrent_period?: string }>({});
 
     const router = useRouter();
 
@@ -34,6 +36,11 @@ const CreateTaskPage: React.FC = () => {
                 [name]: value,
             });
         }
+
+        // Validate recurrent_period format
+        if (name === 'recurrent_period') {
+            validateRecurrentPeriod(value);
+        }
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +50,25 @@ const CreateTaskPage: React.FC = () => {
                 help_image: e.target.files[0],
             });
         }
+    };
+
+    const validateRecurrentPeriod = (value: string) => {
+        const timeRegex = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
+        if (value && !timeRegex.test(value)) {
+            setErrors({ recurrent_period: 'Formato inválido. Usa hh:mm:ss.' });
+        } else {
+            setErrors({});
+        }
+    };
+
+    const formatRecurrentPeriod = (value: string | undefined) => {
+        if (!value) return '00:00:00'; // Default value if undefined
+
+        const parts = value.split(':');
+        const hours = parts[0].padStart(2, '0');
+        const minutes = parts[1] ? parts[1].padStart(2, '0') : '00';
+        const seconds = parts[2] ? parts[2].padStart(2, '0') : '00';
+        return `${hours}:${minutes}:${seconds}`;
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -124,24 +150,23 @@ const CreateTaskPage: React.FC = () => {
                     {formData.is_recurrent && (
                         <>
                             <div className="mt-4">
-                                <label className="block text-gray-700 font-bold mb-2">Cada cuantas horas? (hh:mm:ss)</label>
+                                <label className="block text-gray-700 font-bold mb-2">Cada cuántas horas? (hh:mm:ss)</label>
                                 <input
                                     type="text"
                                     name="recurrent_period"
-                                    value={formData.recurrent_period || ''}
+                                    value={formatRecurrentPeriod(formData.recurrent_period)}
                                     onChange={handleInputChange}
-                                    step="1"
-                                    className="w-full border border-gray-300 p-2 rounded"
+                                    className={`w-full border ${errors.recurrent_period ? 'border-red-500' : 'border-gray-300'} p-2 rounded`}
                                 />
+                                {errors.recurrent_period && <p className="text-red-500 mt-1">{errors.recurrent_period}</p>}
                             </div>
                             <div className="mt-4">
-                               <label className="block text-gray-700 font-bold mb-2">Por cuantos dias?</label>
+                                <label className="block text-gray-700 font-bold mb-2">Por cuántos días?</label>
                                 <input
-                                    type="text"
+                                    type="number"
                                     name="recurrent_days"
-                                    value={formData.recurrent_days || 1}
+                                    value={formData.recurrent_days}
                                     onChange={handleInputChange}
-                                    step="1"
                                     className="w-full border border-gray-300 p-2 rounded"
                                 />
                             </div>

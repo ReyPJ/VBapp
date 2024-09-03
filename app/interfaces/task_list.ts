@@ -20,4 +20,5 @@ export interface TasksListInterface {
     recurrent_period?: string;
     recurrent_days: number;
     proof_image?: File | string;
+    is_archived: boolean;
 }

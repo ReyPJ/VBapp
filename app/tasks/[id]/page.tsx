@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import api from "@/app/utils/api";
 import DeleteTaskButton from "@/app/helpers/deleteTasksButtons";
 import Image from "next/image";
+import ProofListComponent from "@/app/components/proofListComponent";
 
 export default function TaskDetailPage() {
     const { id } = useParams();
@@ -14,6 +15,7 @@ export default function TaskDetailPage() {
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [editTaskData, setEditTaskData] = useState<Partial<TasksListInterface>>({});
     const [proofImage, setProofImage] = useState<File | null>(null);
+    const [proofNote, setProofNote] = useState<string>('');
     const [err, setErr] = useState<boolean>(false);
 
     const router = useRouter();
@@ -85,12 +87,16 @@ export default function TaskDetailPage() {
             if(instanceId) {
                 formData.append('instance_id', instanceId.toString());
             }
-            await api.post(`tasks/${id}/mark-as-completed/`, formData, {
+            if(proofNote) {
+                formData.append('notes', proofNote);
+            }
+            const response = await api.post(`tasks/${id}/mark-as-completed/`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
                 },
             });
+            console.log('Response:', response);
             setErr(false);
             router.push('/tasks');
         } catch (error) {
@@ -104,6 +110,10 @@ export default function TaskDetailPage() {
     }
 
     const isAdminOrStaff = Cookies.get("userRole") === "admin" || Cookies.get("userRole") === "staff";
+    // Inavilite mark-as-completed button if all the tasks are already completed
+    const isCompletedInstances = task.instances?.every((instance) => instance.is_completed);
+    // Check is it is at least one instance to mark as completed
+    const isAtLeastOneInstance = task.instances?.some((instance) => instance.is_completed);
 
     // @ts-ignore
     return (
@@ -238,23 +248,82 @@ export default function TaskDetailPage() {
                     >
                         Subir imagen como prueba de tarea completada:
                     </label>
-                    <input
-                        type="file"
-                        name="proof_image"
-                        accept="image/*"
-                        onChange={(e) => setProofImage(e.target.files?.[0] || null)}
+                    <div className="relative w-full">
+                        <input
+                            type="file"
+                            name="proof_image"
+                            accept="image/*"
+                            onChange={(e) => setProofImage(e.target.files?.[0] || null)}
+                            className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                        />
+                        <div
+                            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm bg-white cursor-pointer flex justify-between items-center">
+                            <span className="text-gray-500">
+                                {proofImage ? proofImage.name : 'Selecciona una imagen'}
+                            </span>
+                            <svg
+                                className="w-6 h-6 text-gray-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 4v16m8-8H4"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                    {err && (
+                        <p className="text-red-600">Debes subir una imagen para poder marcarlo como completado.</p>
+                    )}
+                    <label
+                        htmlFor="proof_note"
+                        className="block text-gray-700 text-sm font-medium"
+                    >
+                        Notas adicionales:
+                    </label>
+                    <textarea
+                        name="proof_note"
+                        value={proofNote}
+                        onChange={(e) => setProofNote(e.target.value)}
                         className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    {err && (
-                        <p className="text-red-600">Debes subir una imagen para poder marcarlo como complatado.</p>
+                    {task.is_recurrent && (
+                        <>
+                            {!isCompletedInstances ? (
+                                <button
+                                    onClick={handleMarkAsCompleted}
+                                    className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    Marcar como completada
+                                </button>
+                            ) : (
+                                <p className="text-green-600 text-xl py-3">La tarea ya ha sido completada correctamente</p>
+                            )}
+                        </>
                     )}
-                    <button
-                        onClick={handleMarkAsCompleted}
-                        className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        Marcar como completada
-                    </button>
+                    {!task.is_recurrent && !task.is_completed && (
+                        <button
+                            onClick={handleMarkAsCompleted}
+                            className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            Marcar como completada
+                        </button>
+                    )}
+                    {!task.is_recurrent && task.is_completed && (
+                        <p className="text-green-600 text-xl py-3">La tarea ya ha sido completada correctamente</p>
+                    )}
                 </div>
+                {task.is_completed && !task.is_recurrent && (
+                    <ProofListComponent task_id={task.id} />
+                )}
+                {task.is_recurrent && isAtLeastOneInstance && (
+                    <ProofListComponent task_id={task.id} />
+                )}
             </div>
         </main>
     );

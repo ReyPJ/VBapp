@@ -8,7 +8,7 @@ const TaskNav: React.FC = () => {
                 <Link href={'/create-task'} className="text-blue-500 hover:text-blue-700">
                     Crear Nueva Tarea
                 </Link>
-                <Link href={'/'} className="text-blue-500 hover:text-blue-700">
+                <Link href={'/archive-tasks'} className="text-blue-500 hover:text-blue-700">
                     Historial de Tareas
                 </Link>
             </div>
