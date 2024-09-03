@@ -20,6 +20,7 @@ const nextConfig = {
                 pathname: '/media/**',
             },
         ],
+        unoptimized: true,
     },
 };
 
