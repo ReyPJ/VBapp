@@ -16,6 +16,7 @@ const CreateTaskPage: React.FC = () => {
         is_recurrent: false,
         recurrent_period: '',
         recurrent_days: 1,
+        is_archived: false,
     });
 
     const [errors, setErrors] = useState<{ recurrent_period?: string }>({});
