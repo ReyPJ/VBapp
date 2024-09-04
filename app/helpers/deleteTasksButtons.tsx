@@ -12,7 +12,7 @@ const DeleteTaskButton: React.FC<DeleteTaskButtonProps> = ({ taskId, onDelete })
     const handleDelete = async () => {
         try {
             const token = Cookies.get("accessToken");
-            await api.delete(`tasks/${taskId}/`, {
+            await api.delete(`tasks/${taskId}/delete/`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
