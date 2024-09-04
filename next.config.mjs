@@ -21,8 +21,8 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 's3-heroku-21.s3.amazonaws.com',
-                pathname: '/media/**'
+                hostname: 'django-assets.nyc3.cdn.digitaloceanspaces.com',
+                pathname: '/django-assets/**'
             }
         ],
     },
