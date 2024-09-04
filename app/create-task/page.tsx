@@ -84,13 +84,12 @@ const CreateTaskPage: React.FC = () => {
         });
 
         try {
-            const response = await api.post('/tasks/', form, {
+            await api.post('/tasks/', form, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log(response.data)
             router.push('/tasks');
         } catch (error) {
             console.error('Error al crear la tarea:', error);
