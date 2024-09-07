@@ -1,9 +1,10 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from "@/app/utils/api";
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { TasksListInterface } from "@/app/interfaces/task_list";
+import { UsersList } from "@/app/interfaces/user_list";
 import Link from "next/link";
 
 const CreateTaskPage: React.FC = () => {
@@ -18,10 +19,13 @@ const CreateTaskPage: React.FC = () => {
         recurrent_days: 1,
         is_archived: false,
     });
-
     const [errors, setErrors] = useState<{ recurrent_period?: string }>({});
+    const [usersList, setUsersList] = useState<UsersList[]>([]);
 
     const router = useRouter();
+
+    useEffect(() => {
+  }, [])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;

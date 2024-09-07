@@ -10,6 +10,7 @@ const CreateUserComponent: React.FC = () => {
     const [last_name, setLastName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [selectedRole, setSelectedRole] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -22,6 +23,7 @@ const CreateUserComponent: React.FC = () => {
                 last_name,
                 email,
                 role: selectedRole,
+                phone,
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -94,6 +96,18 @@ const CreateUserComponent: React.FC = () => {
                         name="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        className="mt-1 block w-full border border-gray-300 rounded-lg p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                        required
+                    />
+                </div>
+                <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Telefono</label>
+                    <input
+                        type="text"
+                        id="phone"
+                        name="phone"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
                         className="mt-1 block w-full border border-gray-300 rounded-lg p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500"
                         required
                     />

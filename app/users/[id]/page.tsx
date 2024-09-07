@@ -250,6 +250,7 @@ const UserDetailPage: React.FC = () => {
                                 <p><strong>Apellido:</strong> {user.last_name}</p>
                                 <p><strong>Email:</strong> {user.email}</p>
                                 <p><strong>Rol:</strong> {user.role}</p>
+                                <p><strong>Telefono:</strong> {user.phone}</p>
                             </div>
                         )}
                     </div>
