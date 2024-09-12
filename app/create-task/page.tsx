@@ -1,5 +1,5 @@
-'use client'
-import React, { useState, useEffect } from 'react';
+'use client';
+import React, { useState } from 'react';
 import api from "@/app/utils/api";
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
@@ -8,6 +8,19 @@ import { UsersList } from "@/app/interfaces/user_list";
 import Link from "next/link";
 
 const CreateTaskPage: React.FC = () => {
+    const now = new Date();
+
+    now.setHours(now.getHours());
+
+    const formatDate = (date: Date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
+
     const [formData, setFormData] = useState<Omit<TasksListInterface, 'id' | 'created_date' | 'modified_date'>>({
         title: '',
         description: '',
@@ -18,14 +31,14 @@ const CreateTaskPage: React.FC = () => {
         recurrent_period: '',
         recurrent_days: 1,
         is_archived: false,
+        scheduled_time_start: formatDate(now),
+        assigned_to: null,
     });
+
     const [errors, setErrors] = useState<{ recurrent_period?: string }>({});
     const [usersList, setUsersList] = useState<UsersList[]>([]);
 
     const router = useRouter();
-
-    useEffect(() => {
-  }, [])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
@@ -155,7 +168,8 @@ const CreateTaskPage: React.FC = () => {
                     {formData.is_recurrent && (
                         <>
                             <div className="mt-4">
-                                <label className="block text-gray-700 font-bold mb-2">Cada cuántas horas? (hh:mm:ss)</label>
+                                <label className="block text-gray-700 font-bold mb-2">Cada cuántas horas?
+                                    (hh:mm:ss)</label>
                                 <input
                                     type="text"
                                     name="recurrent_period"
@@ -163,7 +177,8 @@ const CreateTaskPage: React.FC = () => {
                                     onChange={handleInputChange}
                                     className={`w-full border ${errors.recurrent_period ? 'border-red-500' : 'border-gray-300'} p-2 rounded`}
                                 />
-                                {errors.recurrent_period && <p className="text-red-500 mt-1">{errors.recurrent_period}</p>}
+                                {errors.recurrent_period &&
+                                    <p className="text-red-500 mt-1">{errors.recurrent_period}</p>}
                             </div>
                             <div className="mt-4">
                                 <label className="block text-gray-700 font-bold mb-2">Por cuántos días?</label>
@@ -177,6 +192,16 @@ const CreateTaskPage: React.FC = () => {
                             </div>
                         </>
                     )}
+                </div>
+                <div className="mb-5">
+                    <label className="block text-gray-701 font-bold mb-2">Fecha y Hora de Inicio</label>
+                    <input
+                        type="datetime-local"
+                        name="scheduled_time_start"
+                        value={formData.scheduled_time_start}
+                        onChange={handleInputChange}
+                        className="w-full border border-gray-301 p-2 rounded"
+                    />
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700 font-bold mb-2">Imagen de Ayuda</label>
@@ -199,3 +224,4 @@ const CreateTaskPage: React.FC = () => {
 };
 
 export default CreateTaskPage;
+

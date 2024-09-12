@@ -44,7 +44,8 @@ const UserDetailPage: React.FC = () => {
             email: user?.email || '',
             first_name: user?.first_name || '',
             last_name: user?.last_name || '',
-            role: user?.role || ''
+            role: user?.role || '',
+            phone: user?.phone || '',
         });
     };
 
@@ -66,6 +67,20 @@ const UserDetailPage: React.FC = () => {
             console.error("Error al actualizar los detalles del usuario:", error);
         }
     };
+
+    const handleDeleteUser = async () => {
+        try {
+            const token = Cookies.get('accessToken');
+            await api.delete(`users/${id}/`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+            });
+            router.push('/dashboard');
+        } catch (error) {
+            console.error("Error al eliminar el usuario:", error);
+        }
+    }
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewPassword(e.target.value);
@@ -182,6 +197,18 @@ const UserDetailPage: React.FC = () => {
                                         onChange={handleChange}
                                         className="mt-1 block w-full border border-gray-300 rounded-lg p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500"
                                     />
+                                    <div>
+                                        <label htmlFor="last_name"
+                                               className="block text-sm font-medium text-gray-700">Telefono</label>
+                                        <input
+                                            type="tel"
+                                            id="phone"
+                                            name="phone"
+                                            value={editData.phone}
+                                            onChange={handleChange}
+                                            className="mt-1 block w-full border border-gray-300 rounded-lg p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                        />
+                                    </div>
                                 </div>
                                 <div>
                                     <label htmlFor="role"
@@ -253,6 +280,7 @@ const UserDetailPage: React.FC = () => {
                                 <p><strong>Telefono:</strong> {user.phone}</p>
                             </div>
                         )}
+                        <button onClick={handleDeleteUser} className="py-1 px-2 bg-red-500 rounded text-white mt-2 hover:bg-red-600">Borrar usuario</button>
                     </div>
                 ) : (
                     <p>Cargando...</p>

@@ -195,12 +195,13 @@ export default function TaskDetailPage() {
                         <p className="text-gray-600"><strong>Descripción:</strong> {task.description || 'No disponible'}
                         </p>
                         <p className="text-gray-600"><strong>Fecha de
-                            creación:</strong> {new Date(task.created_date).toLocaleDateString()}</p>
+                            creación:</strong> {new Date(task.created_date).toLocaleDateString()} a las {new Date(task.created_date).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</p>
                         <p className="text-gray-600"><strong>Última
-                            modificación:</strong> {new Date(task.modified_date).toLocaleDateString()}</p>
+                            modificación:</strong> {new Date(task.modified_date).toLocaleDateString()} a las {new Date(task.created_date).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</p>
                         <p className={`text-gray-600 font-semibold ${task.priority === 2 ? 'text-red-600' : task.priority === 1 ? 'text-yellow-600' : 'text-green-600'}`}>
                             {task.priority === 2 ? 'Muy importante' : task.priority === 1 ? 'Importante' : 'No importante'}
                         </p>
+                        <p className={"text-gray-600"}><strong>Inicio programado:</strong> {new Date(task.scheduled_time_start).toLocaleDateString()} a las {new Date(task.scheduled_time_start).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</p>
                         {task.is_recurrent && task.recurrent_period ? (
                             <p className="text-gray-600"><strong>Repetir cada:</strong> {task.recurrent_period} horas
                             </p>
@@ -229,7 +230,7 @@ export default function TaskDetailPage() {
                             {task.instances.map((instance) => (
                                 <li key={instance.id} className="flex justify-between items-center">
                                     <p className="text-gray-600"><strong>Repetición-{instance.instance_number}</strong></p>
-                                    <p className="text-gray-600"><strong>Fecha programada:</strong> {new Date(instance.scheduled_time).toLocaleDateString()}</p>
+                                    <p className="text-gray-600"><strong>Fecha programada:</strong> {new Date(instance.scheduled_time).toLocaleDateString()} a las {new Date(instance.scheduled_time).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</p>
                                     <p className={`text-gray-600 font-semibold ${instance.is_completed ? 'text-green-600' : 'text-yellow-600'}`}>{instance.is_completed ? 'Completado' : 'En progreso'}</p>
                                 </li>
                             ))}

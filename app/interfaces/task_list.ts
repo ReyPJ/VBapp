@@ -14,6 +14,7 @@ export interface TasksListInterface {
     priority: number;
     is_completed: boolean;
     created_date: string;
+    scheduled_time_start: string;
     modified_date: string;
     help_image?: File | string;
     is_recurrent: boolean;
@@ -21,4 +22,5 @@ export interface TasksListInterface {
     recurrent_days: number;
     proof_image?: File | string;
     is_archived: boolean;
+    assigned_to?: number | null;
 }
