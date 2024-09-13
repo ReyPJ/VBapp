@@ -32,7 +32,7 @@ const CreateTaskPage: React.FC = () => {
         recurrent_days: 1,
         is_archived: false,
         scheduled_time_start: formatDate(now),
-        assigned_to: null,
+        assigned_to: 1,
     });
 
     const [errors, setErrors] = useState<{ recurrent_period?: string }>({});
