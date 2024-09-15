@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from "@/app/utils/api";
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
@@ -32,13 +32,32 @@ const CreateTaskPage: React.FC = () => {
         recurrent_days: 1,
         is_archived: false,
         scheduled_time_start: formatDate(now),
-        assigned_to: 1,
+        assigned_to: undefined,
     });
 
     const [errors, setErrors] = useState<{ recurrent_period?: string }>({});
     const [usersList, setUsersList] = useState<UsersList[]>([]);
 
     const router = useRouter();
+
+    useEffect(() => {
+        const token = Cookies.get("accessToken");
+
+        const fetchUsers = async () => {
+            try {
+                const response = await api.get('/users/', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setUsersList(response.data);
+            } catch (error) {
+                console.error('Error al obtener la lista de usuarios:', error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
@@ -55,10 +74,17 @@ const CreateTaskPage: React.FC = () => {
             });
         }
 
-        // Validate recurrent_period format
         if (name === 'recurrent_period') {
             validateRecurrentPeriod(value);
         }
+    };
+
+    const handleGetSelectedUsernameId = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedUserId = Number(e.target.value);
+        setFormData({
+            ...formData,
+            assigned_to: selectedUserId,
+        });
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,6 +181,22 @@ const CreateTaskPage: React.FC = () => {
                     </select>
                 </div>
                 <div className="mb-4">
+                    <label className="block text-gray-700 font-bold mb-2">Asignado a</label>
+                    <select
+                        name="assigned_to"
+                        value={formData.assigned_to || ''}
+                        onChange={handleGetSelectedUsernameId}
+                        className="w-full border border-gray-300 p-2 rounded"
+                    >
+                        <option value="">Escoge el usuario</option>
+                        {usersList.map((user, index) => (
+                            <option key={index} value={user.id}>
+                                {user.username}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="mb-4">
                     <label className="block text-gray-700 font-bold mb-2">
                         <input
                             type="checkbox"
@@ -224,4 +266,3 @@ const CreateTaskPage: React.FC = () => {
 };
 
 export default CreateTaskPage;
-

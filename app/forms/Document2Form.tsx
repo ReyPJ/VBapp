@@ -1,6 +1,7 @@
-import React from "react";
+"use client";
+import React, {useState} from "react";
 import { Document2FormData } from "@/app/interfaces/templates";
-import Image from "next/image";
+import SignaturePad from "@/app/components/SignaturePad";
 
 interface Props {
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -8,6 +9,12 @@ interface Props {
 }
 
 const Document2form: React.FC<Props> = ({ handleInputChange, formData }) => {
+    const [signature, setSignature] = useState<string>('');
+
+    const handleSaveSignature = (signature: string) => {
+        setSignature(signature);
+    };
+
     return(
         <>
             <div className="space-y-4 py-8">
@@ -45,6 +52,7 @@ const Document2form: React.FC<Props> = ({ handleInputChange, formData }) => {
                 />
             </div>
             <h2 className="font-semibold text-lg pb-10 pt-6">Vista previa del documento:</h2>
+            <SignaturePad onSave={handleSaveSignature} />
             <div id="document-2-template" className="w-full">
                 <div className="flex justify-center items-center w-full">
                     <h1 className="text-base font-semibold w-5/6 text-center">
@@ -102,11 +110,11 @@ const Document2form: React.FC<Props> = ({ handleInputChange, formData }) => {
                                 [Nombre Completo del Cliente]<br/>
                                 {formData.name}
                             </p>
-                            <p>
+                            <p className="mb-2">
                                 [Firma del Cliente]<br/>
-                                ___________________
                             </p>
-
+                            {/* eslint-disable @next/next/no-img-element */}
+                            {signature && <img src={signature} alt="Signature" width={100} height={60}/>}
                         </div>
                     </div>
                 </div>

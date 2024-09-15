@@ -22,5 +22,5 @@ export interface TasksListInterface {
     recurrent_days: number;
     proof_image?: File | string;
     is_archived: boolean;
-    assigned_to?: number | null;
+    assigned_to?: number;
 }

@@ -14,9 +14,14 @@ const CreateUserComponent: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!phone || phone.length < 12) {
+            alert('El número de teléfono debe tener al menos 12 dígitos');
+            return;
+        }
+
         try {
             const token = Cookies.get('accessToken');
-            const response = await api.post('users/', {
+            await api.post('users/', {
                 username,
                 password,
                 first_name,
@@ -29,7 +34,6 @@ const CreateUserComponent: React.FC = () => {
                     Authorization: `Bearer ${token}`
                 },
             });
-            console.log(response.data);
             alert('Usuario creado correctamente');
         } catch (error) {
             console.error('Error al crear usuario:', error);

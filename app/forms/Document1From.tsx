@@ -1,6 +1,8 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Document1FormData } from "@/app/interfaces/templates";
 import Image from "next/image";
+import SignaturePad from "@/app/components/SignaturePad";
 
 interface Props {
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -8,6 +10,12 @@ interface Props {
 }
 
 const Document1form: React.FC<Props> = ({ handleInputChange, formData }) => {
+    const [signature, setSignature] = useState<string>('');
+
+    const handleSaveSignature = (signature: string) => {
+        setSignature(signature);
+    };
+
     return (
         <>
             <div className="space-y-6 py-8">
@@ -36,6 +44,7 @@ const Document1form: React.FC<Props> = ({ handleInputChange, formData }) => {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-150 ease-in-out"
                 />
             </div>
+            <SignaturePad onSave={handleSaveSignature} />
             <h2 className="font-semibold text-lg pb-10 pt-6">Vista previa del documento:</h2>
             <div id="document-1-template" className="w-full">
                 <div className="flex justify-between items-center w-full">
@@ -101,8 +110,10 @@ const Document1form: React.FC<Props> = ({ handleInputChange, formData }) => {
                             </ul>
                         </div>
                     </div>
-                    <div className="w-full text-end mt-10">
-                        <p className="text-base">Firma: _______________________________</p>
+                    <div className="w-full text-start mt-10">
+                        <p className="text-base mb-3">Firma:</p>
+                        {/* eslint-disable @next/next/no-img-element */}
+                        {signature && <img src={signature} alt="Signature" width={100} height={60}/>}
                     </div>
                 </div>
             </div>
