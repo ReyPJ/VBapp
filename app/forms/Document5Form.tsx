@@ -1,5 +1,7 @@
+"use client";
 import React, {useState} from "react";
 import { Document5FormData } from "@/app/interfaces/templates";
+import SignaturePad from "@/app/components/SignaturePad";
 
 interface Props {
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -7,6 +9,8 @@ interface Props {
 }
 
 const Document5form: React.FC<Props> = ({ handleInputChange, formData }) => {
+    const [signature, setSignature] = useState<string>('');
+
     const [currentSection, setCurrentSection] = useState<number>(1);
 
     const nextSection = () => {
@@ -16,6 +20,10 @@ const Document5form: React.FC<Props> = ({ handleInputChange, formData }) => {
     const prevSection = () => {
         if (currentSection > 1) setCurrentSection(currentSection - 1);
     }
+
+    const handleSaveSignature = (signature: string) => {
+        setSignature(signature);
+    };
 
     const section1Fields: { name: keyof Document5FormData; placeholder: string }[] = [
         { name: 'dia', placeholder: 'Dia'},
@@ -85,6 +93,7 @@ const Document5form: React.FC<Props> = ({ handleInputChange, formData }) => {
                 </div>
             </div>
             <h2 className="font-semibold text-lg pb-10 pt-6">Vista previa del documento:</h2>
+            <SignaturePad onSave={handleSaveSignature} />
             <div id="document-5-template" className="w-full">
                 <div className="flex flex-col font-semibold w-full text-base gap-5">
                     <h1 className="text-lg font-bold w-5/6 underline">AUTORIZACIÓN DE EUTANASIA</h1>
@@ -110,8 +119,9 @@ const Document5form: React.FC<Props> = ({ handleInputChange, formData }) => {
                         paar dicho procedemiento.
                     </p>
                     <div className='flex flex-col text-base py-2'>
-                        <span>______________________ {formData.telefono}</span>
-                        <p>Firma del propietario / Teléfono</p>
+                        {/* eslint-disable @next/next/no-img-element */}
+                        {signature && <img src={signature} alt="Signature" width={100} height={60}/>}
+                        <p>Firma del propietario</p>
                     </div>
                 </div>
             </div>

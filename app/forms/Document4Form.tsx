@@ -1,5 +1,7 @@
-import React from "react";
+"use client";
+import React, {useState} from "react";
 import { Document4FormData } from "@/app/interfaces/templates";
+import SignaturePad from "@/app/components/SignaturePad";
 
 interface Props {
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -7,6 +9,11 @@ interface Props {
 }
 
 const Document4form: React.FC<Props> = ({ handleInputChange, formData }) => {
+    const [signature, setSignature] = useState<string>('');
+
+    const handleSaveSignature = (signature: string) => {
+        setSignature(signature);
+    };
 
     const toUpperCase = (str: string) => {
         return str?.toUpperCase() ? str?.toUpperCase() : '';
@@ -72,6 +79,7 @@ const Document4form: React.FC<Props> = ({ handleInputChange, formData }) => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
             </div>
+            <SignaturePad onSave={handleSaveSignature} />
             <div id="document-4-template" className="w-full">
                 <div className="flex flex-col text-xs gap-4">
                     <p>Fecha: {formData.fecha}</p>
@@ -123,7 +131,9 @@ const Document4form: React.FC<Props> = ({ handleInputChange, formData }) => {
                     <p>PODRE SER NOTIFICADO DE LOS ASUNTOS RELACIONADOS AL SIGUIENTE CORREO ELECTRONICO:</p>
                     <p>{formData.email}</p>
                     <p>NUMERO DE TELEFONO: {formData.telefono}</p>
-                    <p>FIRMA: ___________________x</p>
+                    <p>FIRMA:</p>
+                    {/* eslint-disable @next/next/no-img-element */}
+                    {signature && <img src={signature} alt="Signature" width={100} height={60}/>}
                 </div>
             </div>
         </>

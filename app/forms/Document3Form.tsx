@@ -1,6 +1,8 @@
+"use client";
 import React, {useState} from "react";
 import { Document3FormData } from "@/app/interfaces/templates";
 import Image from "next/image";
+import SignaturePad from "@/app/components/SignaturePad";
 
 interface Props {
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -9,6 +11,7 @@ interface Props {
 
 const Document3form: React.FC<Props> = ({ handleInputChange, formData }) => {
     const [currentSection, setCurrentSection] = useState<number>(1);
+    const [signature, setSignature] = useState<string>('');
 
     const nextSection = () => {
         if (currentSection < 3) setCurrentSection(currentSection + 1);
@@ -16,6 +19,11 @@ const Document3form: React.FC<Props> = ({ handleInputChange, formData }) => {
 
     const prevSection = () => {
         if (currentSection > 1) setCurrentSection(currentSection - 1);
+    };
+
+
+    const handleSaveSignature = (signature: string) => {
+        setSignature(signature);
     };
 
     const section1Fields: { name: keyof Document3FormData; placeholder: string }[] = [
@@ -85,7 +93,7 @@ const Document3form: React.FC<Props> = ({ handleInputChange, formData }) => {
                     )}
                 </div>
             </div>
-
+            <SignaturePad onSave={handleSaveSignature} />
             <h2 className="font-semibold text-lg pb-10 pt-6">Vista previa del documento:</h2>
             <div id="document-3-template" className="w-full">
                 <div className="flex flex-col mb-3 gap-3 pt-0 justify-center items-center w-full">
@@ -167,7 +175,9 @@ const Document3form: React.FC<Props> = ({ handleInputChange, formData }) => {
                     </p>
                 </div>
                 <div className="w-full flex justify-between pb-2 gap-2 text-xs text-center mt-6">
-                    <p>Firma: _______________________________</p>
+                    <p>Firma: </p>
+                    {/* eslint-disable @next/next/no-img-element */}
+                    {signature && <img src={signature} alt="Signature" width={100} height={60}/>}
                     <p>Fecha: {formData.fecha_salida}</p>
                 </div>
             </div>

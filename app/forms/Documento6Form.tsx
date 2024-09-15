@@ -1,5 +1,7 @@
+"use client";
 import React, {useState} from "react";
 import {Document6FormData} from "@/app/interfaces/templates";
+import SignaturePad from "@/app/components/SignaturePad";
 
 interface Props {
     handleInputChange: (e: React.FormEvent<HTMLInputElement>) => void;
@@ -7,6 +9,8 @@ interface Props {
 }
 
 const Document6form: React.FC<Props> = ({ handleInputChange, formData }) => {
+    const [signature, setSignature] = useState<string>('');
+
     const [currentSection, setCurrentSection] = useState<number>(1);
 
     const nextSection = () => {
@@ -15,6 +19,10 @@ const Document6form: React.FC<Props> = ({ handleInputChange, formData }) => {
 
     const prevSection = () => {
         if (currentSection > 1) setCurrentSection(currentSection - 1);
+    };
+
+    const handleSaveSignature = (signature: string) => {
+        setSignature(signature);
     };
 
     const section1Fields: { name: keyof Document6FormData; placeholder: string }[] = [
@@ -84,6 +92,7 @@ const Document6form: React.FC<Props> = ({ handleInputChange, formData }) => {
                     )}
                 </div>
             </div>
+            <SignaturePad onSave={handleSaveSignature} />
             <h2 className="font-semibold text-lg pb-10 pt-6">Vista previa del documento:</h2>
             <div id="document-6-template" className="w-full">
                 <div className="flex flex-col gap-5 text-sm">
@@ -136,7 +145,9 @@ const Document6form: React.FC<Props> = ({ handleInputChange, formData }) => {
                             totalmente.
                         </p>
                         <p>Fecha: ______________________.</p>
-                        <p>Firma: ______________________.</p>
+                        <p>Firma:</p>
+                        {/* eslint-disable @next/next/no-img-element */}
+                        {signature && <img src={signature} alt="Signature" width={100} height={60}/>}
                     </div>
                 </div>
             </div>

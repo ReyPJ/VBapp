@@ -1,9 +1,11 @@
-import React from "react";
+"use client";
+import React, {useState} from "react";
 import { Document7FormData } from "@/app/interfaces/templates";
 import Image from "next/image";
 import { FaWhatsapp } from "react-icons/fa";
 import { MdPhoneInTalk } from "react-icons/md";
 import { CiLocationArrow1 } from "react-icons/ci";
+import SignaturePad from "@/app/components/SignaturePad";
 
 interface Props {
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -11,6 +13,12 @@ interface Props {
 }
 
 const Document7form: React.FC<Props> = ({ handleInputChange, formData }) => {
+    const [signature, setSignature] = useState<string>('');
+
+    const handleSaveSignature = (signature: string) => {
+        setSignature(signature);
+    };
+
     return (
         <>
             <div className="space-y-4 py-8">
@@ -55,6 +63,7 @@ const Document7form: React.FC<Props> = ({ handleInputChange, formData }) => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
             </div>
+            <SignaturePad onSave={handleSaveSignature} />
             <h2 className="font-semibold text-lg pb-10 pt-6">Vista previa del documento:</h2>
             <div id="document-7-template" className="w-full">
                 <div className="w-full flex flex-col gap-4">
@@ -84,7 +93,8 @@ const Document7form: React.FC<Props> = ({ handleInputChange, formData }) => {
                         </p>
                         <br/>
                         <br/>
-                        <p className='pt-10'>____________________</p>
+                        {/* eslint-disable @next/next/no-img-element */}
+                        {signature && <img src={signature} alt="Signature" width={100} height={60} className='pt-10'/>}
                         <p>Firma del tutor que retira al paciente</p>
                         <br/><br/>
                         <p className='pt-4'>____________________</p>
