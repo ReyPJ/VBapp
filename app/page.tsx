@@ -13,7 +13,6 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
     {id: 1, title: 'Documentos', description: 'Generacion de decumentos para clientes', link: '/formularios'},
-    {id: 2, title: 'Internados', description: 'En progreso de desarrollo', link: '#'},
     {id: 3, title: 'Tareas', description: 'En progreso de desarrollo', link: '/tasks'},
 ];
 
@@ -33,7 +32,7 @@ const Home: React.FC = () => {
                     <DashboardButton />
                 )}
             </div>
-            <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
                 {menuItems.map((item) => (
                     <Link key={item.id} href={item.link}>
             <span
